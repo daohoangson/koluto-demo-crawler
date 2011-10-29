@@ -1,0 +1,3 @@
+http://vietnamnet.vn/rss/xa-hoi.rss, http://vietnamnet.vn/rss/giao-duc.rss, http://vietnamnet.vn/rss/chinh-tri.rss, http://vietnamnet.vn/rss/kinh-te.rss, http://vietnamnet.vn/rss/quoc-te.rss, http://vietnamnet.vn/rss/van-hoa.rss, http://vietnamnet.vn/rss/khoa-hoc.rss, http://vietnamnet.vn/rss/cong-nghe-thong-tin-vien-thong.rss, http://vietnamnet.vn/rss/ban-doc-phap-luat.rss, http://vietnamnet.vn/rss/moi-nong.rss, http://vietnamnet.vn/rss/doc-nhieu-nhat.rss
+XPath
+channel/item/link
