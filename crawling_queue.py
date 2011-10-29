@@ -14,7 +14,7 @@ class FileQueue:
 		if (len(queueFiles) == 0):
 			# there is no current queue
 			# so simple, we will create one
-			self.openNewFile()
+			self.openNew()
 		else:
 			# there are some current queues
 			# we must check for their locks
@@ -37,7 +37,11 @@ class FileQueue:
 				self.open(freeQueueFile)
 	
 	def saveList(self, list):
-		self.f.write('\n'.join(list))
+		"""Saves the list to the queue for later processing"""
+		if (len(list) > 0):
+			# only saves the list if it's not empty
+			self.f.write('\n'.join(list))
+			self.f.write('\n')
 	
 	def open(self, queueFile):
 		"""Opens the specified queue file and lock the associated FileLock"""
@@ -47,7 +51,7 @@ class FileQueue:
 	
 	def openNew(self):
 		"""Select a new queue file name and calls self.openFile"""
-		self.openFile(self.queueDir + self.FILENAME_PREFIX + str(time.time()))
+		self.open(self.queueDir + self.FILENAME_PREFIX + str(time.time()))
 	
 	def getFileLock(self, queueFile):
 		"""Gets the FileLock for the specified queue file"""
@@ -59,9 +63,7 @@ class FileQueue:
 		self.queueLock.unlock()
 
 def main():
-	queue = FileQueue('./', './')
-	queue.saveList(['a', 'b', 'c'])
-	queue.close()
+	print 'This script is not supposed to be run by itself.'
 
 if __name__ == '__main__':
 	main()

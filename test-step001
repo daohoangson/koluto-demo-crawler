@@ -1,4 +1,0 @@
-python step001-queue-links-from-feeds.py 
-wc -l queue
-echo '' > queue
-
