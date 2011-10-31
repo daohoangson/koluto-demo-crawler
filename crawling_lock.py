@@ -36,6 +36,7 @@ class FileLock:
 
 	def lock(self):
 		"""locks it!"""
+		return
 		lockFile = open(self.lockPath, 'w+')
 		lockFile.write(str(time.time()))
 		lockFile.close()
@@ -44,7 +45,7 @@ class FileLock:
 		"""Unlocks it!"""
 		try:
 			os.remove(self.lockPath)
-		except IOError:
+		except OSError:
 			# do nothing in case of fail removal
 			return
 

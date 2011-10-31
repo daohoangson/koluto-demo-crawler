@@ -59,6 +59,8 @@ class FileQueue:
 			
 			# also updates the in-memory queue
 			self.existing.extend(intersection)
+		
+		return len(intersection)
 	
 	def readExisting(self, queueFile):
 		"""Reads existing items from the queue"""
@@ -75,8 +77,12 @@ class FileQueue:
 		except IOError:
 			pass
 	
+	def getItems(self):
+		return self.existing
+	
 	def open(self, queueFile):
 		"""Opens the specified queue file and lock the associated FileLock"""
+		self.queueFile = queueFile
 		self.readExisting(queueFile)
 		self.f = open(queueFile, 'a')
 		self.queueLock = self.getFileLock(queueFile)
@@ -94,6 +100,15 @@ class FileQueue:
 		"""Closes the file handler and unlocks the FileLock"""
 		self.f.close()
 		self.queueLock.unlock()
+	
+	def delete(self):
+		"""Closes the file handler and delete the file completely!"""
+		self.close()
+		
+		try:
+			os.remove(self.queueFile)
+		except OSError:
+			pass
 
 def main():
 	print 'This script is not supposed to be run by itself.'
