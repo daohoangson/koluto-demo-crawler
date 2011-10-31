@@ -47,3 +47,9 @@ class FileLock:
 		except IOError:
 			# do nothing in case of fail removal
 			return
+
+def main():
+	print 'This script is not supposed to be run by itself.'
+
+if (__name__ == '__main__'):
+	main()
