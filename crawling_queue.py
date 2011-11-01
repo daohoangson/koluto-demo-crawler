@@ -62,10 +62,10 @@ class FileQueue:
 		
 		return len(intersection)
 	
-	def readExisting(self, queueFile):
+	def readExisting(self, queuePath):
 		"""Reads existing items from the queue"""
 		try:
-			tmpF = open(queueFile, 'r')
+			tmpF = open(queuePath, 'r')
 			
 			self.existing = []
 			while (True):
@@ -80,21 +80,21 @@ class FileQueue:
 	def getItems(self):
 		return self.existing
 	
-	def open(self, queueFile):
+	def open(self, queuePath):
 		"""Opens the specified queue file and lock the associated FileLock"""
-		self.queueFile = queueFile
-		self.readExisting(queueFile)
-		self.f = open(queueFile, 'a')
-		self.queueLock = self.getFileLock(queueFile)
+		self.queuePath = queuePath
+		self.readExisting(queuePath)
+		self.f = open(queuePath, 'a')
+		self.queueLock = self.getFileLock(queuePath)
 		self.queueLock.lock()
 	
 	def openNew(self):
 		"""Select a new queue file name and calls self.openFile"""
 		self.open(self.queueDir + self.FILENAME_PREFIX + str(int(time.time())))
 	
-	def getFileLock(self, queueFile):
+	def getFileLock(self, queuePath):
 		"""Gets the FileLock for the specified queue file"""
-		return FileLock(self.lockDir + os.path.basename(queueFile))
+		return FileLock(self.lockDir + os.path.basename(queuePath))
 	
 	def close(self):
 		"""Closes the file handler and unlocks the FileLock"""
@@ -106,7 +106,7 @@ class FileQueue:
 		self.close()
 		
 		try:
-			os.remove(self.queueFile)
+			os.remove(self.queuePath)
 		except OSError:
 			pass
 

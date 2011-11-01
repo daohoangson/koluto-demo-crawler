@@ -28,7 +28,9 @@ def readFeed(feedUrl, feedMode, feedModeConfig):
 			# then we will find all elements which match the XPath in the feedModeConfig
 			xmlObj = xml.etree.ElementTree.fromstring(feedContents)
 			links = [link.text for link in xmlObj.findall(feedModeConfig)]
+			crawling_config.DEBUG('Found %d links.' % len(links))
 	except:
+		crawling_config.DEBUG('Exception happens!')
 		pass
 	
 	return links

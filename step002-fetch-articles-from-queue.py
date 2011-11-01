@@ -60,6 +60,7 @@ def main():
 		# get the file queue for this run (this will lock the queue until it finishes)
 		feedQueue = FileQueue(crawling_config.DIR_QUEUE, crawling_config.DIR_LOCKS)
 		links = feedQueue.getItems()
+		fetched = 0
 		
 		# goes through links
 		for link in links:
@@ -69,8 +70,15 @@ def main():
 				# the link is not fetched, we will do it now
 				crawling_config.DEBUG('Fetching %s.' % link)
 				fetchLink(link, linkFile)
+				fetched += 1
 		
-		feedQueue.delete()
+		if (len(links) == 0 or fetched > 0):
+			# fetched some links, delete the queue
+			# also delete the queue if it's already empty
+			feedQueue.delete()
+		else:
+			# fetched nothing, just keep the queue
+			feedQueue.close()
 		
 		crawling_config.DEBUG('Sleeping for %d seconds' % crawling_config.SLEEP_TIME)
 		time.sleep(crawling_config.SLEEP_TIME)

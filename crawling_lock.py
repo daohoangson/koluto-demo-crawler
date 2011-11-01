@@ -36,7 +36,6 @@ class FileLock:
 
 	def lock(self):
 		"""locks it!"""
-		return
 		lockFile = open(self.lockPath, 'w+')
 		lockFile.write(str(time.time()))
 		lockFile.close()
