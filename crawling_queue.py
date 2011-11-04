@@ -8,9 +8,10 @@ class FileQueue:
 	MAX_FILESIZE = 102400 # in bytes, equals 100KB
 	existing = []
 	
-	def __init__(self, queueDir, lockDir):
+	def __init__(self, queueDir, lockDir, mode = 'w'):
 		self.queueDir = queueDir
 		self.lockDir = lockDir
+		self.mode = mode
 		queueFiles = glob.glob(queueDir + '*')
 		
 		if (len(queueFiles) == 0):
@@ -29,7 +30,7 @@ class FileQueue:
 					# the queue is being locked, ignore it
 					continue
 				
-				if (os.path.getsize(queueFile) > self.MAX_FILESIZE):
+				if (mode == 'w' and os.path.getsize(queueFile) > self.MAX_FILESIZE):
 					# the queue has grown too big, ignore it
 					continue
 				
@@ -54,7 +55,7 @@ class FileQueue:
 		
 		if (len(intersection) > 0):
 			# only saves if it's not empty
-			self.f.write('\n'.join(intersection))
+			self.f.write('\n'.join(intersection).encode('utf-8'))
 			self.f.write('\n')
 			
 			# also updates the in-memory queue
@@ -84,7 +85,7 @@ class FileQueue:
 		"""Opens the specified queue file and lock the associated FileLock"""
 		self.queuePath = queuePath
 		self.readExisting(queuePath)
-		self.f = open(queuePath, 'a')
+		if (self.mode == 'w'): self.f = open(queuePath, 'a')
 		self.queueLock = self.getFileLock(queuePath)
 		self.queueLock.lock()
 	
@@ -98,7 +99,7 @@ class FileQueue:
 	
 	def close(self):
 		"""Closes the file handler and unlocks the FileLock"""
-		self.f.close()
+		if (self.mode == 'w'): self.f.close()
 		self.queueLock.unlock()
 	
 	def delete(self):
