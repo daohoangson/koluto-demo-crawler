@@ -52,6 +52,8 @@ def fetchLink(link, linkFile):
 		f = open(linkFile, 'w')
 		f.write(contents)
 		f.close()
+		
+		# print "\a";
 	except:
 		pass
 

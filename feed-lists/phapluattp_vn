@@ -1,0 +1,3 @@
+http://phapluattp.vn/chinh-tri.rss, http://phapluattp.vn/kinh-te.rss, http://phapluattp.vn/xa-hoi.rss, http://phapluattp.vn/the-gioi.rss, http://phapluattp.vn/tap-chi-phap-luat.rss, http://phapluattp.vn/giao-duc.rss, http://phapluattp.vn/van-hoa-giai-tri.rss, http://phapluattp.vn/the-thao.rss, http://phapluattp.vn/do-thi.rss, http://phapluattp.vn/nhip-song-do-thi.rss, http://phapluattp.vn/tap-chi-suc-khoe-gia-dinh.rss, http://phapluattp.vn/nguyet-san-phap-luat.rss, http://phapluattp.vn/tap-chi-ky-nguyen-so.rss
+XPath
+channel/item/link

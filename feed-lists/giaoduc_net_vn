@@ -1,0 +1,3 @@
+http://giaoduc.net.vn/RSS/Feed.aspx, http://giaoduc.net.vn/RSS/Giao-duc-24h/5.rss, http://giaoduc.net.vn/RSS/Xa-hoi/15.rss, http://giaoduc.net.vn/RSS/Quoc-te/16.rss, http://giaoduc.net.vn/RSS/NTD-thong-thai/13.rss, http://giaoduc.net.vn/RSS/Du-hoc-Chon-truong/272.rss, http://giaoduc.net.vn/RSS/Phap-luat/17.rss, http://giaoduc.net.vn/RSS/Kham-pha/21.rss, http://giaoduc.net.vn/RSS/The-thao/18.rss, http://giaoduc.net.vn/RSS/Giai-tri/20.rss, http://giaoduc.net.vn/RSS/Giao-duc-Quoc-phong/32.rss
+XPath
+channel/item/link

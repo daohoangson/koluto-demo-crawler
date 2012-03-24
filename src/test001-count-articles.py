@@ -16,8 +16,13 @@ def countArticles(dir):
 			if (os.path.getsize(itemPath) == 0):
 				print 'Empty file: %s' % itemPath
 		elif (os.path.isdir(itemPath)):
+			if (item == '.git'): continue
+			
 			# found a sub directory, recursively process it
 			count += countArticles(itemPath + '/')
+	
+	if (count == 0):
+		print 'Directory with no file: %s' % dir
 	
 	return count
 

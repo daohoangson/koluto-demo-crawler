@@ -1,7 +1,24 @@
 import os
 import sys
-from BeautifulSoup import BeautifulSoup
+import re, htmlentitydefs
+from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup
 import crawling_config
+
+def textOf(soup):
+    def visible(soup):
+        if (soup.parent.name in ['style', 'script']):
+            return False
+        elif re.match('<!--.*-->', str(soup), re.DOTALL):
+            return False
+        return True
+    
+    texts = soup.findAll(text=True)
+    visibleTexts = filter(visible, texts)
+    return u' '.join(visibleTexts)
+
+def unescape(text):
+    decoded = BeautifulStoneSoup(text, convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
+    return decoded
 
 def lookForArticles(dir):
 	"""Goes into specified directory and look for article files.
@@ -17,10 +34,17 @@ def lookForArticles(dir):
 			
 			result = parseArticle(itemPath)
 			
+			
+			print result
+			print itemPath
+			foo = input('Enter something...')
+			
 			if (result == False):
 				print itemPath, (result != False)
 		elif (os.path.isdir(itemPath)):
 			# found a sub directory, recursively process it
+			if (item == '.git'): continue
+			
 			lookForArticles(itemPath + '/')
 
 def parseArticle(articlePath):
@@ -33,11 +57,15 @@ def parseArticle(articlePath):
 	bs = BeautifulSoup(contents)
 	
 	# looks for all <p> tags which contain period or comma
-	pTags = bs.findAll('p')
+	pTags = bs.findAll([u'p', u'span', u'blockquote'])
 	pTagsFiltered = []
 	for pTag in pTags:
-		pTagStr = str(pTag)
-		if (pTagStr.find('.') != -1 or pTagStr.find(',') != -1):
+		pTagStr = textOf(pTag)
+		# if (pTagStr.find('.') != -1 or pTagStr.find(',') != -1):
+		if (pTagStr.find('.') != -1):
+			# try to get to the highest level tag with single child
+			while len(pTag.parent.contents) == 1:
+				pTag = pTag.parent
 			pTagsFiltered.append(pTag)
 	
 	# find common parents
@@ -72,7 +100,7 @@ def parseArticle(articlePath):
 	
 	if finalAnswer != False:
 		# we got a final answer, returns str of it
-		return str(finalAnswer)
+		return unescape(str(finalAnswer))
 	else:
 		# no final answer is found, returns False
 		return False
