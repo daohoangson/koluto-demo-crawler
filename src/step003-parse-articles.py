@@ -2,23 +2,51 @@ import os
 import sys
 import re, htmlentitydefs
 from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup
+from datetime import datetime
 import crawling_config
+from koluto import Koluto
+
+def getParsedFile(articleFile):
+	return articleFile.replace(crawling_config.DIR_ARTICLES, crawling_config.DIR_PARSED)
+
+def fileExists(filePath):
+	try:
+		f = open(filePath, 'r')
+		f.close()
+
+		return True
+	except IOError:
+		return False
 
 def textOf(soup):
-    def visible(soup):
-        if (soup.parent.name in ['style', 'script']):
-            return False
-        elif re.match('<!--.*-->', str(soup), re.DOTALL):
-            return False
-        return True
-    
-    texts = soup.findAll(text=True)
-    visibleTexts = filter(visible, texts)
-    return u' '.join(visibleTexts)
-
-def unescape(text):
-    decoded = BeautifulStoneSoup(text, convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
-    return decoded
+	def visible(soup):
+		if (soup.parent.name in ['style', 'script']):
+			return False
+		elif re.match('<!--.*-->', str(soup), re.DOTALL):
+			return False
+		return True
+	
+	texts = soup.findAll(text=True)
+	visibleTexts = filter(visible, texts)
+	textOf = u' '.join(visibleTexts)
+	return textOf
+	
+def submitArticle(itemPath, parsedPath):
+	koluto = Koluto()
+	koluto.setAuthInfo('sondh', '1')
+	
+	extraData = []
+	sections = []
+	
+	mtime = os.path.getmtime(itemPath)
+	timeobj = datetime.fromtimestamp(mtime)
+	sections.append(timeobj.strftime('%Y%m%d'))
+	
+	f = open(parsedPath, 'r')
+	contents = f.read()
+	f.close()
+	
+	koluto.submitDocument(contents, extraData, sections)
 
 def lookForArticles(dir):
 	"""Goes into specified directory and look for article files.
@@ -32,15 +60,32 @@ def lookForArticles(dir):
 			if (item == '.gitignore'): continue
 			if (item == '.DS_Store'): continue
 			
+			parsedFile = getParsedFile(itemPath)
+			if (fileExists(parsedFile)):
+				submitArticle(itemPath, parsedFile)
+				continue
+			
 			result = parseArticle(itemPath)
 			
-			
-			print result
-			print itemPath
-			foo = input('Enter something...')
-			
-			if (result == False):
-				print itemPath, (result != False)
+			if (result != False):
+				# only save result if it's parsable
+				try:
+					os.makedirs(os.path.dirname(parsedFile))
+				except OSError:
+					# the directory exists
+					pass
+				
+				try:
+					f = open(parsedFile, 'w')
+					f.write(result.encode('utf-8'))
+					f.close()
+					
+					submitArticle(itemPath, parsedFile)
+				except:
+					exit(1)
+					pass
+			else:
+				print "Unable to parse " + itemPath
 		elif (os.path.isdir(itemPath)):
 			# found a sub directory, recursively process it
 			if (item == '.git'): continue
@@ -54,7 +99,7 @@ def parseArticle(articlePath):
 	contents = f.read()
 	f.close()
 	
-	bs = BeautifulSoup(contents)
+	bs = BeautifulSoup(contents, convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
 	
 	# looks for all <p> tags which contain period or comma
 	pTags = bs.findAll([u'p', u'span', u'blockquote'])
@@ -100,7 +145,8 @@ def parseArticle(articlePath):
 	
 	if finalAnswer != False:
 		# we got a final answer, returns str of it
-		return unescape(str(finalAnswer))
+		# return unescape(u''.join([unicode(pTag) for pTag in pTagsFiltered if pTag in finalAnswer.contents]))
+		return textOf(finalAnswer)
 	else:
 		# no final answer is found, returns False
 		return False
