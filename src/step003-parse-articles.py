@@ -63,6 +63,7 @@ def lookForArticles(dir):
 			parsedFile = getParsedFile(itemPath)
 			if (fileExists(parsedFile)):
 				submitArticle(itemPath, parsedFile)
+				# only uncomment this if you want to resubmit everything!
 				continue
 			
 			result = parseArticle(itemPath)
