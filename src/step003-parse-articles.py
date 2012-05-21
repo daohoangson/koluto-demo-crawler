@@ -46,7 +46,7 @@ def submitArticle(itemPath, parsedPath):
 	contents = f.read()
 	f.close()
 	
-	koluto.submitDocument(contents, extraData, sections)
+	print koluto.submitDocument(contents, extraData, sections)
 
 def lookForArticles(dir):
 	"""Goes into specified directory and look for article files.
@@ -83,7 +83,7 @@ def lookForArticles(dir):
 					
 					submitArticle(itemPath, parsedFile)
 				except:
-					exit(1)
+					print "Problem working with " + itemPath
 					pass
 			else:
 				print "Unable to parse " + itemPath

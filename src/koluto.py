@@ -20,7 +20,12 @@ class Koluto:
 	def submitDocument(self, text, extraData=[], sections=[]):
 		request = urllib2.Request(
 			'%s/%s' % (self.rootUrl, 'documents'),
-			self.urlEncode({'text': text, 'extraData[]': extraData, 'sections[]': sections}),
+			self.urlEncode({
+				'_responseFormat': 'json',
+				'text': text,
+				'extraData[]': extraData,
+				'sections[]': sections
+			}),
 		)
 		
 		if (self.username != False and self.password != False):
@@ -30,7 +35,7 @@ class Koluto:
 		handle = urllib2.urlopen(request)
 		contents = handle.read()
 		
-		print contents
+		return contents
 	
 	def urlEncode(self, params={}):
 	    if not isinstance(params, dict): 
