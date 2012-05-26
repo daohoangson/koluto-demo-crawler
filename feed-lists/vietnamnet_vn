@@ -1,3 +1,9 @@
-http://vietnamnet.vn/rss/xa-hoi.rss, http://vietnamnet.vn/rss/giao-duc.rss, http://vietnamnet.vn/rss/chinh-tri.rss, http://vietnamnet.vn/rss/kinh-te.rss, http://vietnamnet.vn/rss/quoc-te.rss, http://vietnamnet.vn/rss/van-hoa.rss, http://vietnamnet.vn/rss/khoa-hoc.rss, http://vietnamnet.vn/rss/cong-nghe-thong-tin-vien-thong.rss, http://vietnamnet.vn/rss/ban-doc-phap-luat.rss, http://vietnamnet.vn/rss/moi-nong.rss, http://vietnamnet.vn/rss/doc-nhieu-nhat.rss
 XPath
 channel/item/link
+http://vietnamnet.vn/rss/xa-hoi.rss social
+http://vietnamnet.vn/rss/giao-duc.rss education
+http://vietnamnet.vn/rss/chinh-tri.rss social
+http://vietnamnet.vn/rss/kinh-te.rss finance
+http://vietnamnet.vn/rss/van-hoa.rss culture
+http://vietnamnet.vn/rss/khoa-hoc.rss education
+http://vietnamnet.vn/rss/cong-nghe-thong-tin-vien-thong.rss it

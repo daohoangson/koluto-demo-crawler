@@ -1,3 +1,10 @@
-http://www.cand.com.vn/vi-VN/thoisu.rss, http://www.cand.com.vn/vi-VN/xahoi.rss, http://www.cand.com.vn/vi-VN/quocte.rss, http://www.cand.com.vn/vi-VN/kinhte.rss, http://www.cand.com.vn/vi-VN/vanhoa.rss, http://www.cand.com.vn/vi-VN/phapluat.rss, http://www.cand.com.vn/vi-VN/thethao.rss, http://www.cand.com.vn/vi-VN/khcn.rss, http://www.cand.com.vn/vi-VN/nguoinoitieng.rss, http://www.cand.com.vn/vi-VN/phongsu.rss, http://www.cand.com.vn/vi-VN/nhanai.rss, http://www.cand.com.vn/vi-VN/trongmatdan.rss, http://www.cand.com.vn/vi-VN/toiphama-z.rss, http://www.cand.com.vn/vi-VN/cstc.rss, http://www.cand.com.vn/vi-VN/binhluan.rss
 XPath
 channel/item/link
+http://www.cand.com.vn/vi-VN/thoisu.rss social
+http://www.cand.com.vn/vi-VN/xahoi.rss social
+http://www.cand.com.vn/vi-VN/kinhte.rss finance
+http://www.cand.com.vn/vi-VN/vanhoa.rss culture
+http://www.cand.com.vn/vi-VN/phapluat.rss social
+http://www.cand.com.vn/vi-VN/thethao.rss sport
+http://www.cand.com.vn/vi-VN/nguoinoitieng.rss entertainment
+http://www.cand.com.vn/vi-VN/phongsu.rss social

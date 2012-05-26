@@ -1,3 +1,10 @@
-http://vneconomy.vn/rss/trang-chu, http://vneconomy.vn/rss/thoi-su, http://vneconomy.vn/rss/doanh-nghiep, http://vneconomy.vn/rss/tai-chinh, http://vneconomy.vn/rss/chung-khoan, http://vneconomy.vn/rss/giao-thuong, http://vneconomy.vn/rss/thi-truong, http://vneconomy.vn/rss/bat-dong-san, http://vneconomy.vn/rss/the-gioi, http://vneconomy.vn/rss/cuoc-song-so, http://vneconomy.vn/rss/xe-360
 XPath
 channel/item/link
+http://vneconomy.vn/rss/thoi-su social
+http://vneconomy.vn/rss/doanh-nghiep finance
+http://vneconomy.vn/rss/tai-chinh finance
+http://vneconomy.vn/rss/chung-khoan finance
+http://vneconomy.vn/rss/giao-thuong finance
+http://vneconomy.vn/rss/thi-truong finance
+http://vneconomy.vn/rss/bat-dong-san finance
+http://vneconomy.vn/rss/cuoc-song-so it

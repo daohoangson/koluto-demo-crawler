@@ -1,3 +1,18 @@
-http://www.24h.com.vn/upload/rss/tintuctrongngay.rss, http://www.24h.com.vn/upload/rss/bongda.rss, http://www.24h.com.vn/upload/rss/anninhhinhsu.rss, http://www.24h.com.vn/upload/rss/thoitrang.rss, http://www.24h.com.vn/upload/rss/thoitranghitech.rss, http://www.24h.com.vn/upload/rss/tienvangchungkhoan.rss, http://www.24h.com.vn/upload/rss/amthuc.rss, http://www.24h.com.vn/upload/rss/lamdep.rss, http://www.24h.com.vn/upload/rss/tingame.rss, http://www.24h.com.vn/upload/rss/phim.rss, http://www.24h.com.vn/upload/rss/giaoducduhoc.rss, http://www.24h.com.vn/upload/rss/bantrecuocsong.rss, http://www.24h.com.vn/upload/rss/canhacmtv.rss, http://www.24h.com.vn/upload/rss/thethao.rss, http://www.24h.com.vn/upload/rss/phithuongkyquac.rss, http://www.24h.com.vn/upload/rss/vitinhinternet.rss, http://www.24h.com.vn/upload/rss/dienthoai.rss, http://www.24h.com.vn/upload/rss/otoxemay.rss, http://www.24h.com.vn/upload/rss/thitruongtieudung.rss, http://www.24h.com.vn/upload/rss/dulich.rss, http://www.24h.com.vn/upload/rss/ytethietbi.rss, http://www.24h.com.vn/upload/rss/choigame24h.rss, http://www.24h.com.vn/upload/rss/cuoisuot24gio.rss
 XPath
 channel/item/link
+http://www.24h.com.vn/upload/rss/bongda.rss sport
+http://www.24h.com.vn/upload/rss/thoitrang.rss fashion
+http://www.24h.com.vn/upload/rss/thoitranghitech.rss fashion
+http://www.24h.com.vn/upload/rss/tienvangchungkhoan.rss finance
+http://www.24h.com.vn/upload/rss/tingame.rss entertainment
+http://www.24h.com.vn/upload/rss/phim.rss entertainment
+http://www.24h.com.vn/upload/rss/giaoducduhoc.rss education
+http://www.24h.com.vn/upload/rss/bantrecuocsong.rss lifestyle
+http://www.24h.com.vn/upload/rss/canhacmtv.rss lifestyle
+http://www.24h.com.vn/upload/rss/thethao.rss sport
+http://www.24h.com.vn/upload/rss/vitinhinternet.rss it
+http://www.24h.com.vn/upload/rss/dienthoai.rss it
+http://www.24h.com.vn/upload/rss/thitruongtieudung.rss finance
+http://www.24h.com.vn/upload/rss/dulich.rss lifestyle
+http://www.24h.com.vn/upload/rss/ytethietbi.rss social
+http://www.24h.com.vn/upload/rss/choigame24h.rss entertainment

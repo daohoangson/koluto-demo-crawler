@@ -13,7 +13,7 @@ from crawling_queue import FileQueue
 FLAG_SLEEPING = False
 FLAG_EXIT_NOW = False
 
-def readFeed(feedUrl, feedMode, feedModeConfig):
+def readFeed(feedUrl, feedMode, feedModeConfig, section='Unknown'):
 	"""Processes feed from its url, mode and mode configuration. Return a list of links"""
 	crawling_config.DEBUG('Reading %s (mode: %s)' % (feedUrl, feedMode))
 	
@@ -27,7 +27,7 @@ def readFeed(feedUrl, feedMode, feedModeConfig):
 			# in this mode, the feed contents will be treated as XML
 			# then we will find all elements which match the XPath in the feedModeConfig
 			xmlObj = xml.etree.ElementTree.fromstring(feedContents)
-			links = [link.text for link in xmlObj.findall(feedModeConfig)]
+			links = ['%s|%s' % (link.text, section) for link in xmlObj.findall(feedModeConfig)]
 			crawling_config.DEBUG('Found %d links.' % len(links))
 	except:
 		crawling_config.DEBUG('Exception happens!')
@@ -59,12 +59,15 @@ def main():
 					feedFile = open(feedList, 'r')
 					crawling_config.DEBUG('Processing %s' % feedList)
 					
-					feedUrls = feedFile.readline().strip().split(',')
 					feedMode = feedFile.readline().strip()
 					feedModeConfig = feedFile.readline().strip()
+					feedUrls = feedFile.read().strip().split('\n')
+					
+					feedFile.close()
 		
 					for feedUrl in feedUrls:
-						links = readFeed(feedUrl.strip(), feedMode, feedModeConfig)
+						feedUrlParts = feedUrl.split(' ')
+						links = readFeed(feedUrlParts[0], feedMode, feedModeConfig, feedUrlParts[1])
 						saved += feedQueue.saveList(links)
 				except IOError:
 					pass

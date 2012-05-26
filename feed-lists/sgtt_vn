@@ -1,3 +1,13 @@
-http://sgtt.vn/RssFeeds.aspx?ChannelID=-1, http://sgtt.vn/RssFeeds.aspx?ChannelID=48, http://sgtt.vn/RssFeeds.aspx?ChannelID=9, http://sgtt.vn/RssFeeds.aspx?ChannelID=25, http://sgtt.vn/RssFeeds.aspx?ChannelID=32, http://sgtt.vn/RssFeeds.aspx?ChannelID=15, http://sgtt.vn/RssFeeds.aspx?ChannelID=39, http://sgtt.vn/RssFeeds.aspx?ChannelID=148, http://sgtt.vn/RssFeeds.aspx?ChannelID=50, http://sgtt.vn/RssFeeds.aspx?ChannelID=20, http://sgtt.vn/RssFeeds.aspx?ChannelID=91, http://sgtt.vn/RssFeeds.aspx?ChannelID=84, http://chodientu.vn/gian-hang/sieuthisgtt.rss, http://sgtt.vn/RssFeeds.aspx?ChannelID=156, http://sgtt.vn/RssFeeds.aspx?ChannelID=213
 XPath
 channel/item/link
+http://sgtt.vn/RssFeeds.aspx?ChannelID=48 social
+http://sgtt.vn/RssFeeds.aspx?ChannelID=9 social
+http://sgtt.vn/RssFeeds.aspx?ChannelID=25 finance
+http://sgtt.vn/RssFeeds.aspx?ChannelID=32 lifestyle
+http://sgtt.vn/RssFeeds.aspx?ChannelID=15 entertainment
+http://sgtt.vn/RssFeeds.aspx?ChannelID=39 culture
+http://sgtt.vn/RssFeeds.aspx?ChannelID=148 lifestyle
+http://sgtt.vn/RssFeeds.aspx?ChannelID=50 education
+http://sgtt.vn/RssFeeds.aspx?ChannelID=20 sport
+http://sgtt.vn/RssFeeds.aspx?ChannelID=91 lifestyle
+http://sgtt.vn/RssFeeds.aspx?ChannelID=156 lifestyle

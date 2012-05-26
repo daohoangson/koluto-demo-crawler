@@ -28,8 +28,13 @@ def countArticles(dir):
 
 def main():
 	print 'Counting articles and looking for empty files...'
-	articles = countArticles(crawling_config.DIR_ARTICLES)
-	print 'Articles: %d' % articles
+	#articles = countArticles(crawling_config.DIR_ARTICLES)
+	#print 'Articles: %d' % articles
+	
+	print 'Counting parsed and looking for empty files...'
+	parsed = countArticles(crawling_config.DIR_PARSED)
+	print 'Parsed: %d' % parsed
+	
 
 if (__name__ == '__main__'):
 	main()

@@ -2,6 +2,8 @@ import os
 import sys
 import re, htmlentitydefs
 import random
+import json
+import re
 from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup, Comment
 from datetime import datetime
 import crawling_config
@@ -9,9 +11,6 @@ from koluto import Koluto
 import MySQLdb as mdb
 
 conn = None
-
-def getParsedFile(source, target, articleFile):
-	return articleFile.replace(source, target)
 
 def fileExists(filePath):
 	try:
@@ -22,9 +21,11 @@ def fileExists(filePath):
 	except IOError:
 		return False
 
-def textOf(soup, getTag):
+def textOf(soup, getTag, isLinkVisible=True):
 	def visible(soup):
 		if (soup.parent.name in ['style', 'script']):
+			return False
+		elif (isLinkVisible == False and (soup.parent.name in ['a'] or (soup.parent.parent.name in ['a']))):
 			return False
 		# not needed to check for comment because they are stripped out at the beginning already
 		# elif re.match('<!--.*-->', str(soup), re.DOTALL):
@@ -40,24 +41,27 @@ def textOf(soup, getTag):
 		visibleTexts = filter(visible, texts)
 		textOf = u' '.join(visibleTexts)
 		
-	return textOf
+	return textOf.encode('utf-8')
 	
-def submitArticle(itemPath, parsedPath):
+def submitArticle(parsedResult):
 	koluto = Koluto()
 	koluto.setAuthInfo('sondh', '1')
 	
 	extraData = []
 	sections = []
 	
-	mtime = os.path.getmtime(itemPath)
-	timeobj = datetime.fromtimestamp(mtime)
-	sections.append(timeobj.strftime('%Y%m%d'))
+	# add section
+	sections.append(parsedResult['section'])
 	
-	f = open(parsedPath, 'r')
-	contents = f.read()
-	f.close()
-
-	return koluto.submitDocument(contents, extraData, sections)
+	# time as section
+	timeobj = datetime.fromtimestamp(int(parsedResult['timestamp']))
+	timeymd = timeobj.strftime('%Y%m%d')
+	sections.append(timeymd)
+	
+	# mixed
+	sections.append('%s_%s' % (parsedResult['section'], timeymd))
+	
+	return koluto.submitDocument(parsedResult['text'], extraData, sections)
 
 def lookForArticles(source, target, dir, submit = False):
 	"""Goes into specified directory and look for article files.
@@ -72,38 +76,24 @@ def lookForArticles(source, target, dir, submit = False):
 			if (item == '.gitignore'): continue
 			if (item == '.DS_Store'): continue
 			
-			parsedFile = getParsedFile(source, target, itemPath)
 			kolutoSubmited = False
 			dbSubmited = False
 			
-			if (fileExists(parsedFile)):
-				if (submit):
-					kolutoSubmited = submitArticle(itemPath, parsedFile)
-			else:
-				result = parseArticle(itemPath)
-			
-				if (result != False):
-					# only save result if it's parsable
-					try:
-						os.makedirs(os.path.dirname(parsedFile))
-					except OSError:
-						# the directory exists
-						pass
+			result = parseArticle(itemPath)
+		
+			if (result != False):
+				# only save result if it's parsable
+				try:
+					if (submit):
+						kolutoSubmited = submitArticle(result)
 				
-					try:
-						f = open(parsedFile, 'w')
-						f.write(result.encode('utf-8'))
-						f.close()
-					
-						if (submit):
-							submitArticle(itemPath, parsedFile)
-					
-						internal_count += 1
-					except:
-						print "Problem working with " + itemPath
-						pass
-				else:
-					print "Unable to parse " + itemPath
+					internal_count += 1
+				except Exception, e:
+					raise
+					print "Problem working with " + itemPath
+					pass
+			else:
+				print "Unable to parse " + itemPath
 			
 			if (submit and kolutoSubmited and conn):
 				# submit to our database now
@@ -114,7 +104,7 @@ def lookForArticles(source, target, dir, submit = False):
 						(article_source, article_text)\
 						VALUES\
 						(%s, %s)\
-					", (itemPath, contents))
+					", (result['source'], result['html']))
 
 					cursor.close()
 
@@ -135,6 +125,8 @@ def parseArticle(articlePath):
 	"""Parses article from the given path. Returns the article contents as str
 	if it can be found or False if fails."""
 	f = open(articlePath, 'r')
+	metadataStr = f.readline().strip()
+	metadata = json.loads(metadataStr)
 	contents = f.read()
 	f.close()
 	
@@ -208,16 +200,30 @@ def parseArticle(articlePath):
 		# we will have to find the biggest one
 		lenMax = -1
 		for parentTag in parentTags:
-			lenThis = len(textOf(parentTag, False));
+			textThis = textOf(parentTag, False, False)
+			textThis = re.sub(r'[~`!@#$%\^&\*\(\)_=\+\[{\]}\\\|;:''",<.>\/\?]+', '', textThis)
+			textThis = textThis.strip()
+			lenThis = len(textThis)
 			
 			# assign the answer if pTagFiltered count is larger than current max count
 			if (lenThis > lenMax):
+				print textThis
+				print lenThis
 				finalAnswer = parentTag
 				lenMax = lenThis
 	
 	if finalAnswer != False:
 		# we got a final answer, returns it
-		return textOf(finalAnswer, True)
+		
+		# get page title
+		title = unicode(bs.find(u'title'))
+		
+		result = metadata;
+		result['title'] = title;
+		result['html'] = textOf(finalAnswer, True);
+		result['text'] = textOf(finalAnswer, False);
+		
+		return result
 	else:
 		# no final answer is found, returns False
 		return False

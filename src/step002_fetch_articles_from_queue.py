@@ -6,6 +6,7 @@ import sys
 import time
 import urllib
 import urlparse
+import json
 import crawling_config
 from crawling_lock import FileLock
 from crawling_queue import FileQueue
@@ -37,7 +38,7 @@ def fileExists(linkFile):
 	except IOError:
 		return False
 
-def fetchLink(link, linkFile):
+def fetchLink(link, linkFile, section='Unknown'):
 	dir = os.path.dirname(linkFile)
 	
 	try:
@@ -50,6 +51,15 @@ def fetchLink(link, linkFile):
 		contents = urllib.urlopen(link).read()	
 		
 		f = open(linkFile, 'w')
+		
+		# metadata
+		f.write(json.dumps({
+			'source': link,
+			'timestamp': '%d' % time.time(),
+			'section': section
+		}))
+		f.write('\n')
+		
 		f.write(contents)
 		f.close()
 		
@@ -64,13 +74,20 @@ def main():
 		links = feedQueue.getItems()
 		
 		# goes through links
-		for link in links:
+		for linkRaw in links:
+			linkParts = linkRaw.split('|')
+			if (len(linkParts) != 2):
+				# invalid!
+				continue
+			link = linkParts[0]
+			section = linkParts[1]
+			
 			linkFile = getLinkFile(link)
 			
 			if (fileExists(linkFile) == False):
 				# the link is not fetched, we will do it now
 				crawling_config.DEBUG('Fetching %s.' % link)
-				fetchLink(link, linkFile)
+				fetchLink(link, linkFile, section)
 		
 		feedQueue.delete()
 		

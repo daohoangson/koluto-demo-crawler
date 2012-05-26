@@ -1,3 +1,24 @@
-http://www.zing.vn/news/rss/new.html, http://www.zing.vn/news/rss/home.html, http://www.zing.vn/news/rss/xa-hoi.html, http://www.zing.vn/news/rss/xa-hoi/tu-thien.html, http://www.zing.vn/news/rss/the-gioi.html, http://www.zing.vn/news/rss/the-gioi/anh-va-video-clip.html, http://www.zing.vn/news/rss/the-gioi/chuyen-la.html, http://www.zing.vn/news/rss/nhip-song-tre.html, http://www.zing.vn/news/rss/nhip-song-tre/giao-duc.html, http://www.zing.vn/news/rss/nhip-song-tre/teen-viet.html, http://www.zing.vn/news/rss/nhip-song-tre/trac-nghiem.html, http://www.zing.vn/news/rss/nhip-song-tre/viec-lam.html, http://www.zing.vn/news/rss/sanh-dieu.html, http://www.zing.vn/news/rss/sanh-dieu/cong-nghe.html, http://www.zing.vn/news/rss/sanh-dieu/mobile.html, http://www.zing.vn/news/rss/sanh-dieu/oto-xe-may.html, http://www.zing.vn/news/rss/am-nhac.html, http://www.zing.vn/news/rss/am-nhac/nhac-chau-a.html, http://www.zing.vn/news/rss/am-nhac/nhac-quoc-te.html, http://www.zing.vn/news/rss/am-nhac/nhac-viet-nam.html, http://www.zing.vn/news/rss/phim-anh.html, http://www.zing.vn/news/rss/phim-anh/phim-chau-a.html, http://www.zing.vn/news/rss/phim-anh/phim-quoc-te.html, http://www.zing.vn/news/rss/phim-anh/phim-viet-nam.html, http://www.zing.vn/news/rss/tinh-yeu-gioi-tinh.html, http://www.zing.vn/news/rss/giai-tri.html, http://www.zing.vn/news/rss/giai-tri/choi-vui.html, http://www.zing.vn/news/rss/giai-tri/an-ngon.html, http://www.zing.vn/news/rss/chia-se.html, http://www.zing.vn/news/rss/dep.html, http://www.zing.vn/news/rss/dep/lam-dep.html, http://www.zing.vn/news/rss/dep/nguoi-dep.html, http://www.zing.vn/news/rss/dep/thoi-trang.html, http://www.zing.vn/news/rss/hinh-su.html
 XPath
 channel/item/link
+http://www.zing.vn/news/rss/xa-hoi.html social
+http://www.zing.vn/news/rss/nhip-song-tre.html lifestyle
+http://www.zing.vn/news/rss/nhip-song-tre/giao-duc.html education
+http://www.zing.vn/news/rss/nhip-song-tre/teen-viet.html lifestyle
+http://www.zing.vn/news/rss/sanh-dieu.html lifestyle
+http://www.zing.vn/news/rss/sanh-dieu/cong-nghe.html it
+http://www.zing.vn/news/rss/sanh-dieu/mobile.html it
+http://www.zing.vn/news/rss/am-nhac.html entertainment
+http://www.zing.vn/news/rss/am-nhac/nhac-chau-a.html entertainment
+http://www.zing.vn/news/rss/am-nhac/nhac-quoc-te.html entertainment
+http://www.zing.vn/news/rss/am-nhac/nhac-viet-nam.html entertainment
+http://www.zing.vn/news/rss/phim-anh.html entertainment
+http://www.zing.vn/news/rss/phim-anh/phim-chau-a.html entertainment
+http://www.zing.vn/news/rss/phim-anh/phim-quoc-te.html entertainment
+http://www.zing.vn/news/rss/phim-anh/phim-viet-nam.html entertainment
+http://www.zing.vn/news/rss/tinh-yeu-gioi-tinh.html lifestyle
+http://www.zing.vn/news/rss/giai-tri.html entertainment
+http://www.zing.vn/news/rss/dep.html fashion
+http://www.zing.vn/news/rss/dep/lam-dep.html fashion
+http://www.zing.vn/news/rss/dep/nguoi-dep.html fashion
+http://www.zing.vn/news/rss/dep/thoi-trang.html fashion
+http://www.zing.vn/news/rss/hinh-su.html social

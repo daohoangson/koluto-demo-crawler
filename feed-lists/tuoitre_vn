@@ -1,3 +1,25 @@
-http://tuoitre.vn/RssFeeds.aspx?ChannelID=3, http://tuoitre.vn/RssFeeds.aspx?ChannelID=6, http://tuoitre.vn/RssFeeds.aspx?ChannelID=12, http://tuoitre.vn/RssFeeds.aspx?ChannelID=17, http://tuoitre.vn/RssFeeds.aspx?ChannelID=6, http://tuoitre.vn/RssFeeds.aspx?ChannelID=2, http://tuoitre.vn/RssFeeds.aspx?ChannelID=94, http://tuoitre.vn/RssFeeds.aspx?ChannelID=442, http://tuoitre.vn/RssFeeds.aspx?ChannelID=312, http://tuoitre.vn/RssFeeds.aspx?ChannelID=7, http://tuoitre.vn/RssFeeds.aspx?ChannelID=560, http://tuoitre.vn/RssFeeds.aspx?ChannelID=194, http://tuoitre.vn/RssFeeds.aspx?ChannelID=269, http://tuoitre.vn/RssFeeds.aspx?ChannelID=365, http://tuoitre.vn/RssFeeds.aspx?ChannelID=13, http://tuoitre.vn/RssFeeds.aspx?ChannelID=85, http://tuoitre.vn/RssFeeds.aspx?ChannelID=13, http://tuoitre.vn/RssFeeds.aspx?ChannelID=14, http://tuoitre.vn/RssFeeds.aspx?ChannelID=246, http://tuoitre.vn/RssFeeds.aspx?ChannelID=5, http://tuoitre.vn/RssFeeds.aspx?ChannelID=252, http://tuoitre.vn/RssFeeds.aspx?ChannelID=399, http://tuoitre.vn/RssFeeds.aspx?ChannelID=10, http://tuoitre.vn/RssFeeds.aspx?ChannelID=10, http://tuoitre.vn/RssFeeds.aspx?ChannelID=10, http://tuoitre.vn/RssFeeds.aspx?ChannelID=10, http://tuoitre.vn/RssFeeds.aspx?ChannelID=16, http://tuoitre.vn/RssFeeds.aspx?ChannelID=67, http://tuoitre.vn/RssFeeds.aspx?ChannelID=65, http://tuoitre.vn/RssFeeds.aspx?ChannelID=66
 XPath
 channel/item/link
+http://tuoitre.vn/RssFeeds.aspx?ChannelID=3 social
+http://tuoitre.vn/RssFeeds.aspx?ChannelID=6 social
+http://tuoitre.vn/RssFeeds.aspx?ChannelID=12 lifestyle
+http://tuoitre.vn/RssFeeds.aspx?ChannelID=17 lifestyle
+http://tuoitre.vn/RssFeeds.aspx?ChannelID=6 social
+http://tuoitre.vn/RssFeeds.aspx?ChannelID=94 social
+http://tuoitre.vn/RssFeeds.aspx?ChannelID=442 social
+http://tuoitre.vn/RssFeeds.aspx?ChannelID=7 lifestyle
+http://tuoitre.vn/RssFeeds.aspx?ChannelID=560 lifestyle
+http://tuoitre.vn/RssFeeds.aspx?ChannelID=194 lifestyle
+http://tuoitre.vn/RssFeeds.aspx?ChannelID=365 lifestyle
+http://tuoitre.vn/RssFeeds.aspx?ChannelID=13 education
+http://tuoitre.vn/RssFeeds.aspx?ChannelID=85 education
+http://tuoitre.vn/RssFeeds.aspx?ChannelID=14 sport
+http://tuoitre.vn/RssFeeds.aspx?ChannelID=5 sport
+http://tuoitre.vn/RssFeeds.aspx?ChannelID=399 sport
+http://tuoitre.vn/RssFeeds.aspx?ChannelID=10 entertainment
+http://tuoitre.vn/RssFeeds.aspx?ChannelID=10 culture
+http://tuoitre.vn/RssFeeds.aspx?ChannelID=10 entertainment
+http://tuoitre.vn/RssFeeds.aspx?ChannelID=16 it
+http://tuoitre.vn/RssFeeds.aspx?ChannelID=67 it
+http://tuoitre.vn/RssFeeds.aspx?ChannelID=65 it
+http://tuoitre.vn/RssFeeds.aspx?ChannelID=66 it

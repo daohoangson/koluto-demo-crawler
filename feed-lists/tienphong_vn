@@ -1,3 +1,32 @@
-http://www.tienphong.vn/Page/RssView.aspx?ChannelID=-1, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=2, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=104, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=114, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=18, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=3, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=24, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=22, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=105, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=12, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=80, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=119, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=11, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=49, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=111, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=110, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=7, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=35, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=36, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=5, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=32, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=109, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=31, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=4, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=26, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=27, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=154, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=25, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=117, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=46, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=45, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=47, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=71, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=40, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=142, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=143, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=144, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=145, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=146, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=147, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=148, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=149, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=150, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=113, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=127, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=128, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=129, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=130, http://www.tienphong.vn/Page/RssView.aspx?ChannelID=13
 XPath
 channel/item/link
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=104 education
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=3 finance
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=24 finance
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=22 finance
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=105 finance
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=12 social
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=119 social
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=11 sport
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=49 sport
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=110 sport
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=7 entertainment
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=35 entertainment
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=36 entertainment
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=4 lifestyle
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=26 lifestyle
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=27 lifestyle
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=25 education
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=117 education
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=46 education
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=45 it
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=47 lifestyle
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=71 education
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=40 education
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=142 lifestyle
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=143 lifestyle
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=146 fashion
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=147 lifestyle
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=149 fashion
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=150 lifestyle
+http://www.tienphong.vn/Page/RssView.aspx?ChannelID=13 social
