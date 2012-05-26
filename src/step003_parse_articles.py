@@ -1,13 +1,17 @@
 import os
 import sys
 import re, htmlentitydefs
+import random
 from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup
 from datetime import datetime
 import crawling_config
 from koluto import Koluto
+import MySQLdb as mdb
 
-def getParsedFile(articleFile):
-	return articleFile.replace(crawling_config.DIR_ARTICLES, crawling_config.DIR_PARSED)
+conn = None
+
+def getParsedFile(source, target, articleFile):
+	return articleFile.replace(source, target)
 
 def fileExists(filePath):
 	try:
@@ -18,7 +22,7 @@ def fileExists(filePath):
 	except IOError:
 		return False
 
-def textOf(soup):
+def textOf(soup, getTag):
 	def visible(soup):
 		if (soup.parent.name in ['style', 'script']):
 			return False
@@ -26,9 +30,15 @@ def textOf(soup):
 			return False
 		return True
 	
-	texts = soup.findAll(text=True)
-	visibleTexts = filter(visible, texts)
-	textOf = u' '.join(visibleTexts)
+	if (getTag):
+		texts = soup
+		visibleTexts = filter(visible, texts)
+		textOf = u' '.join(map(unicode, visibleTexts))
+	else:
+		texts = soup.findAll(text=True)
+		visibleTexts = filter(visible, texts)
+		textOf = u' '.join(visibleTexts)
+		
 	return textOf
 	
 def submitArticle(itemPath, parsedPath):
@@ -45,13 +55,14 @@ def submitArticle(itemPath, parsedPath):
 	f = open(parsedPath, 'r')
 	contents = f.read()
 	f.close()
-	
-	print koluto.submitDocument(contents, extraData, sections)
 
-def lookForArticles(dir):
+	return koluto.submitDocument(contents, extraData, sections)
+
+def lookForArticles(source, target, dir, submit = False):
 	"""Goes into specified directory and look for article files.
 	Sub-directories will be processed also (recursively)"""
 	contents = os.listdir(dir)
+	internal_count = 0
 	
 	for item in contents:
 		itemPath = dir + item
@@ -60,38 +71,64 @@ def lookForArticles(dir):
 			if (item == '.gitignore'): continue
 			if (item == '.DS_Store'): continue
 			
-			parsedFile = getParsedFile(itemPath)
+			parsedFile = getParsedFile(source, target, itemPath)
+			kolutoSubmited = False
+			dbSubmited = False
+			
 			if (fileExists(parsedFile)):
-				submitArticle(itemPath, parsedFile)
-				# only uncomment this if you want to resubmit everything!
-				continue
-			
-			result = parseArticle(itemPath)
-			
-			if (result != False):
-				# only save result if it's parsable
-				try:
-					os.makedirs(os.path.dirname(parsedFile))
-				except OSError:
-					# the directory exists
-					pass
-				
-				try:
-					f = open(parsedFile, 'w')
-					f.write(result.encode('utf-8'))
-					f.close()
-					
-					submitArticle(itemPath, parsedFile)
-				except:
-					print "Problem working with " + itemPath
-					pass
+				if (submit):
+					kolutoSubmited = submitArticle(itemPath, parsedFile)
 			else:
-				print "Unable to parse " + itemPath
+				result = parseArticle(itemPath)
+			
+				if (result != False):
+					# only save result if it's parsable
+					try:
+						os.makedirs(os.path.dirname(parsedFile))
+					except OSError:
+						# the directory exists
+						pass
+				
+					try:
+						f = open(parsedFile, 'w')
+						f.write(result.encode('utf-8'))
+						f.close()
+					
+						if (submit):
+							submitArticle(itemPath, parsedFile)
+					
+						internal_count += 1
+					except:
+						print "Problem working with " + itemPath
+						pass
+				else:
+					print "Unable to parse " + itemPath
+			
+			if (submit and kolutoSubmited and conn):
+				# submit to our database now
+				try:
+					cursor = conn.cursor()
+					cursor.execute("\
+						INSERT INTO tbl_article\
+						(article_source, article_text)\
+						VALUES\
+						(%s, %s)\
+					", (itemPath, contents))
+
+					cursor.close()
+
+					dbSubmited = True
+				except mdb.Error:
+					dbSubmited = False
+			
+			print (itemPath, kolutoSubmited, dbSubmited)
 		elif (os.path.isdir(itemPath)):
 			# found a sub directory, recursively process it
 			if (item == '.git'): continue
 			
-			lookForArticles(itemPath + '/')
+			internal_count += lookForArticles(source, target, itemPath + '/', submit)
+	
+	return internal_count
 
 def parseArticle(articlePath):
 	"""Parses article from the given path. Returns the article contents as str
@@ -100,20 +137,31 @@ def parseArticle(articlePath):
 	contents = f.read()
 	f.close()
 	
-	bs = BeautifulSoup(contents, convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
+	try:
+		bs = BeautifulSoup(contents, convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
+	except TypeError:
+		return False
 	
-	# looks for all <p> tags which contain period or comma
-	pTags = bs.findAll([u'p', u'span', u'blockquote'])
+	# looks for tags which contain period or comma
+	pTags = bs.findAll([u'p', u'span', u'blockquote', u'div'])
 	pTagsFiltered = []
 	for pTag in pTags:
-		pTagStr = textOf(pTag)
+		if (pTag.name == 'div'):
+			# get text from a <div> differently
+			pTagStr = u''
+			pDivTexts = pTag.findAll(text=True, recursive=False)
+			if (pDivTexts != None):
+				pTagStr = u' '.join(pDivTexts)
+		else:
+			pTagStr = textOf(pTag, False)
+		
 		# if (pTagStr.find('.') != -1 or pTagStr.find(',') != -1):
 		if (pTagStr.find('.') != -1):
 			# try to get to the highest level tag with single child
 			while len(pTag.parent.contents) == 1:
 				pTag = pTag.parent
 			pTagsFiltered.append(pTag)
-	
+
 	# find common parents
 	parentTags = []
 	for pTag in pTagsFiltered:
@@ -129,31 +177,44 @@ def parseArticle(articlePath):
 		finalAnswer = parentTags[0]
 	else:
 		# there are more than one parent tags found
-		# we will have to find the one contains the largest number of pTagsFiltered
-		countMax = -1
+		# we will have to find the biggest one
+		lenMax = -1
 		for parentTag in parentTags:
-			count = 0
-			
-			# count pTagsFiltered
-			for pTag in pTagsFiltered:
-				if (pTag in parentTag.contents):
-					count += 1
+			lenThis = len(textOf(parentTag, False));
 			
 			# assign the answer if pTagFiltered count is larger than current max count
-			if (count > countMax):
+			if (lenThis > lenMax):
 				finalAnswer = parentTag
-				countMax = count
+				lenMax = lenThis
 	
 	if finalAnswer != False:
-		# we got a final answer, returns str of it
-		# return unescape(u''.join([unicode(pTag) for pTag in pTagsFiltered if pTag in finalAnswer.contents]))
-		return textOf(finalAnswer)
+		# we got a final answer, returns it
+		return textOf(finalAnswer, True)
 	else:
 		# no final answer is found, returns False
 		return False
 
 def main():
-	lookForArticles(crawling_config.DIR_ARTICLES)
+	global conn
+	
+	try:
+		conn = mdb.connect(
+			host=crawling_config.MYSQL_HOST,
+			user=crawling_config.MYSQL_USER,
+			passwd=crawling_config.MYSQL_PASSWORD,
+			db=crawling_config.MYSQL_DATABASE,
+			charset='utf8'
+		)
+		
+		if (conn):
+			conn.autocommit(True) # make it commit automatically so we can Ctrl+C anytime
+			
+			lookForArticles(crawling_config.DIR_ARTICLES, crawling_config.DIR_PARSED, crawling_config.DIR_ARTICLES, True)
+			conn.close()
+		else:
+			print "No MySQL connection?"
+	except mdb.Error, e:
+		print "Error %d: %s" % (e.args[0],e.args[1])
 	
 	print 'Bye bye'
 
