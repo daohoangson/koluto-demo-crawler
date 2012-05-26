@@ -2,7 +2,7 @@ import os
 import sys
 import re, htmlentitydefs
 import random
-from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup
+from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup, Comment
 from datetime import datetime
 import crawling_config
 from koluto import Koluto
@@ -26,8 +26,9 @@ def textOf(soup, getTag):
 	def visible(soup):
 		if (soup.parent.name in ['style', 'script']):
 			return False
-		elif re.match('<!--.*-->', str(soup), re.DOTALL):
-			return False
+		# not needed to check for comment because they are stripped out at the beginning already
+		# elif re.match('<!--.*-->', str(soup), re.DOTALL):
+			# return False
 		return True
 	
 	if (getTag):
@@ -142,6 +143,10 @@ def parseArticle(articlePath):
 	except TypeError:
 		return False
 	
+	# strips comments
+	comments = bs.findAll(text=lambda text:isinstance(text, Comment))
+	[comment.extract() for comment in comments] # bye bye!
+	
 	# looks for tags which contain period or comma
 	pTags = bs.findAll([u'p', u'span', u'blockquote', u'div'])
 	pTagsFiltered = []
@@ -168,6 +173,29 @@ def parseArticle(articlePath):
 		parent = pTag.parent
 		if (parent not in parentTags):
 			parentTags.append(parent)
+	
+	# filter unwanted tags
+	for parentTag in parentTags:
+		unwantedTags = parentTag.findAll([u'table', u'a'])
+		for unwantedTag in unwantedTags:
+			belongsToAFilteredTag = False
+			tmp = unwantedTag
+			
+			# go up the parse tree
+			try:
+				while (tmp.parent != parentTag):
+					if (tmp.parent in pTagsFiltered):
+						belongsToAFilteredTag = True
+						break # while (tmp.parent != None):
+					tmp = tmp.parent
+			except:
+				# may happen if we remove <table /> contain some <a /> for example
+				pass
+			
+			if (belongsToAFilteredTag == False):
+				# oops, this unwanted tag is not belong to any of the filtered tags
+				# it must come from parent tags, remove it!
+				unwantedTag.extract() # bye bye
 	
 	# looking for a final answer
 	finalAnswer = False
