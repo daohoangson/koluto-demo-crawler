@@ -2,3 +2,5 @@
 .DS_Store
 articles/*
 parsed/*
+processed/
+test-articles/

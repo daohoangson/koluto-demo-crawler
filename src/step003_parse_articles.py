@@ -4,6 +4,7 @@ import re, htmlentitydefs
 import random
 import json
 import re
+import shutil
 from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup, Comment
 from datetime import datetime
 import crawling_config
@@ -76,10 +77,47 @@ def lookForArticles(source, target, dir, submit = False):
 			if (item == '.gitignore'): continue
 			if (item == '.DS_Store'): continue
 			
+			result = False
 			kolutoSubmited = False
 			dbSubmited = False
+			dbExisted = False
 			
-			result = parseArticle(itemPath)
+			itemPathInTarget = itemPath.replace(source, target)
+			if (fileExists(itemPathInTarget)):
+				print "PROCESSED->SKIPPED: %s" % itemPath
+				continue # for item in contents:
+			
+			try:
+				f = open(itemPath, 'r')
+				metadataStr = f.readline().strip()
+				metadata = json.loads(metadataStr)
+				contents = f.read()
+				f.close()
+				
+				# check for source in our database before continue
+				cursor = conn.cursor()
+				
+				existed = cursor.execute("\
+					SELECT article_id FROM tbl_article\
+					WHERE article_source = %s\
+				", (metadata['source']))
+				
+				if (cursor.fetchone() != None):
+					# this means the source URL is in our db already
+					print "Skipped (existed in our db)"
+					dbExisted = True
+				
+				cursor.close()
+				
+				if (dbExisted == False):
+					# only parse if this article is not existed in our db
+					parsed = parseArticle(contents)
+					
+					if (parsed != False):
+						result = dict(metadata.items() + parsed.items())
+			except TypeError:
+				# may happen if the file is locked or something like that
+				pass
 		
 			if (result != False):
 				# only save result if it's parsable
@@ -95,7 +133,7 @@ def lookForArticles(source, target, dir, submit = False):
 			else:
 				print "Unable to parse " + itemPath
 			
-			if (submit and kolutoSubmited != False and conn):
+			if (submit and kolutoSubmited != False):
 				# submit to our database now
 				try:
 					cursor = conn.cursor()
@@ -115,6 +153,21 @@ def lookForArticles(source, target, dir, submit = False):
 					dbSubmited = True
 				except mdb.Error:
 					dbSubmited = False
+				
+			# okie, now create the file in target
+			# to mark this file as processed
+			try:
+				os.makedirs(os.path.dirname(itemPathInTarget))
+			except OSError:
+				# the directory exists
+				pass
+			try:
+				f = open(itemPathInTarget, 'w')
+				f.write('%d' % time.time())
+				f.close()
+			except:
+				# huh?
+				pass
 			
 			print (itemPath, kolutoSubmited != False, dbSubmited)
 		elif (os.path.isdir(itemPath)):
@@ -125,15 +178,7 @@ def lookForArticles(source, target, dir, submit = False):
 	
 	return internal_count
 
-def parseArticle(articlePath):
-	"""Parses article from the given path. Returns the article contents as str
-	if it can be found or False if fails."""
-	f = open(articlePath, 'r')
-	metadataStr = f.readline().strip()
-	metadata = json.loads(metadataStr)
-	contents = f.read()
-	f.close()
-	
+def parseArticle(contents):
 	try:
 		bs = BeautifulSoup(contents, convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
 	except TypeError:
@@ -217,13 +262,11 @@ def parseArticle(articlePath):
 	if finalAnswer != False:
 		# we got a final answer, returns it
 		
-		# get page title
-		title = unicode(bs.find(u'title'))
-		
-		result = metadata;
-		result['title'] = title;
-		result['html'] = textOf(finalAnswer, True);
-		result['text'] = textOf(finalAnswer, False);
+		result = {
+			'title': unicode(bs.find(u'title')),
+			'html': textOf(finalAnswer, True),
+			'text': textOf(finalAnswer, False)
+		};
 		
 		return result
 	else:
@@ -245,7 +288,7 @@ def main():
 		if (conn):
 			conn.autocommit(True) # make it commit automatically so we can Ctrl+C anytime
 			
-			lookForArticles(crawling_config.DIR_ARTICLES, crawling_config.DIR_PARSED, crawling_config.DIR_ARTICLES, True)
+			lookForArticles(crawling_config.DIR_ARTICLES, crawling_config.DIR_PROCESSED, crawling_config.DIR_ARTICLES, True)
 			conn.close()
 		else:
 			print "No MySQL connection?"
