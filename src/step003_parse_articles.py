@@ -95,16 +95,20 @@ def lookForArticles(source, target, dir, submit = False):
 			else:
 				print "Unable to parse " + itemPath
 			
-			if (submit and kolutoSubmited and conn):
+			if (submit and kolutoSubmited != False and conn):
 				# submit to our database now
 				try:
 					cursor = conn.cursor()
+					
+					timeobj = datetime.fromtimestamp(int(result['timestamp']))
+					timeymd = timeobj.strftime('%Y%m%d')
+					
 					cursor.execute("\
 						INSERT INTO tbl_article\
-						(article_source, article_text)\
+						(article_source, article_html, article_text, date_timestamp, date_string, section_string, koluto_id)\
 						VALUES\
-						(%s, %s)\
-					", (result['source'], result['html']))
+						(%s, %s, %s, %s, %s, %s, %s)\
+					", (result['source'], result['html'], result['text'], result['timestamp'], timeymd, result['section'], kolutoSubmited['_id']))
 
 					cursor.close()
 
@@ -112,7 +116,7 @@ def lookForArticles(source, target, dir, submit = False):
 				except mdb.Error:
 					dbSubmited = False
 			
-			print (itemPath, kolutoSubmited, dbSubmited)
+			print (itemPath, kolutoSubmited != False, dbSubmited)
 		elif (os.path.isdir(itemPath)):
 			# found a sub directory, recursively process it
 			if (item == '.git'): continue
@@ -207,8 +211,6 @@ def parseArticle(articlePath):
 			
 			# assign the answer if pTagFiltered count is larger than current max count
 			if (lenThis > lenMax):
-				print textThis
-				print lenThis
 				finalAnswer = parentTag
 				lenMax = lenThis
 	
