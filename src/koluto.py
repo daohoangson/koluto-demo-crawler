@@ -1,6 +1,7 @@
 import urllib, urllib2
 import httplib
 import base64
+import json
 
 class Koluto:
 	host = '127.0.0.1'
@@ -33,12 +34,21 @@ class Koluto:
 			base64str = base64.encodestring('%s:%s' % (self.username, self.password))[:-1]
 			request.add_header('Authorization', 'Basic %s' % base64str)
 		
+		contents = False
+		
 		try:
 			handle = urllib2.urlopen(request)
 			contents = handle.read()
+			contents = json.loads(contents)
+			
+			print contents
 		except IOError:
 			contents = False
 		except httplib.HTTPException:
+			contents = False
+		except ValueError:
+			# this may happen if server response incorrectly
+			print 'ValueError, latest contents: %s' % contents
 			contents = False
 		# we may catch all kind of exception but it's not a good practice...
 		
