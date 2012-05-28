@@ -40,8 +40,6 @@ class Koluto:
 			handle = urllib2.urlopen(request)
 			contents = handle.read()
 			contents = json.loads(contents)
-			
-			print contents
 		except IOError:
 			contents = False
 		except httplib.HTTPException:
@@ -52,6 +50,38 @@ class Koluto:
 			contents = False
 		# we may catch all kind of exception but it's not a good practice...
 		
+		return contents
+		
+	def getSimilarDocuments(self, text, sections=[]):
+		request = urllib2.Request(
+			'%s/%s' % (self.rootUrl, 'similar'),
+			self.urlEncode({
+				'_responseFormat': 'json',
+				'text': text,
+				'sections[]': sections
+			}),
+		)
+		
+		if (self.username != False and self.password != False):
+			base64str = base64.encodestring('%s:%s' % (self.username, self.password))[:-1]
+			request.add_header('Authorization', 'Basic %s' % base64str)
+		
+		contents = False
+		
+		try:
+			handle = urllib2.urlopen(request)
+			contents = handle.read()
+			contents = json.loads(contents)
+		except IOError:
+			contents = False
+		except httplib.HTTPException:
+			contents = False
+		except ValueError:
+			# this may happen if server response incorrectly
+			print 'ValueError, latest contents: %s' % contents
+			contents = False
+		# we may catch all kind of exception but it's not a good practice...
+
 		return contents
 	
 	def urlEncode(self, params={}):

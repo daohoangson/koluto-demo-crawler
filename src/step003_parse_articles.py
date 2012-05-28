@@ -12,6 +12,7 @@ from koluto import Koluto
 import MySQLdb as mdb
 
 conn = None
+koluto = None
 
 def fileExists(filePath):
 	try:
@@ -45,24 +46,62 @@ def textOf(soup, getTag, isLinkVisible=True):
 	return textOf.encode('utf-8')
 	
 def submitArticle(parsedResult):
-	koluto = Koluto()
-	koluto.setAuthInfo('sondh', '1')
+	if (koluto != None):
+		extraData = []
+		sections = []
 	
-	extraData = []
-	sections = []
+		# add section
+		sections.append(parsedResult['section'])
 	
-	# add section
-	sections.append(parsedResult['section'])
+		# time as section
+		timeobj = datetime.fromtimestamp(int(parsedResult['timestamp']))
+		timeymd = timeobj.strftime('%Y%m%d')
+		sections.append(timeymd)
 	
-	# time as section
-	timeobj = datetime.fromtimestamp(int(parsedResult['timestamp']))
-	timeymd = timeobj.strftime('%Y%m%d')
-	sections.append(timeymd)
+		# mixed
+		sections.append('%s_%s' % (parsedResult['section'], timeymd))
 	
-	# mixed
-	sections.append('%s_%s' % (parsedResult['section'], timeymd))
+		return koluto.submitDocument(parsedResult['text'], extraData, sections)
 	
-	return koluto.submitDocument(parsedResult['text'], extraData, sections)
+	return False
+
+def findParentId(parsedResult):
+	if (koluto != None):
+		sections = []
+		
+		timeobj = datetime.fromtimestamp(int(parsedResult['timestamp']))
+		timeymd = timeobj.strftime('%Y%m%d')
+		sections.append('%s_%s' % (parsedResult['section'], timeymd))
+		
+		similarDocuments = koluto.getSimilarDocuments(parsedResult['text'], sections)
+		bestMatchedId = False
+		bestMatchedResult = 0.8 # minimum accept result must be 80%
+		
+		if (similarDocuments != False):
+			for document in similarDocuments:
+				documentResult = float(document[u'value'][u'result'])
+				if (documentResult > bestMatchedResult):
+					bestMatchedId = document[u'_id']
+					bestMatchedResult = documentResult
+		
+		if (bestMatchedId != False):
+			# some similar document has been found
+			# we will now get the article_id from our db
+			cursor = conn.cursor()
+			
+			existed = cursor.execute("\
+				SELECT article_id FROM tbl_article\
+				WHERE koluto_id = %s\
+			", (bestMatchedId))
+			
+			dbDocument = cursor.fetchone()
+			
+			cursor.close()
+			
+			if (dbDocument != None):
+				return dbDocument[0]
+		
+	return 0
 
 def lookForArticles(source, target, dir, submit = False):
 	"""Goes into specified directory and look for article files.
@@ -78,6 +117,7 @@ def lookForArticles(source, target, dir, submit = False):
 			if (item == '.DS_Store'): continue
 			
 			result = False
+			parentId = 0
 			kolutoSubmited = False
 			dbSubmited = False
 			dbExisted = False
@@ -118,42 +158,50 @@ def lookForArticles(source, target, dir, submit = False):
 			except TypeError:
 				# may happen if the file is locked or something like that
 				pass
-		
+			
 			if (result != False):
 				# only save result if it's parsable
-				try:
-					if (submit):
-						kolutoSubmited = submitArticle(result)
-				
-					internal_count += 1
-				except Exception, e:
-					raise
-					print "Problem working with " + itemPath
-					pass
+				internal_count += 1
+
+				if (submit):
+					try:
+						parentId = findParentId(result)
+						
+						if (parentId == 0):
+							# only submit to koluto if no parent article was found
+							kolutoSubmited = submitArticle(result)
+						
+						# submit to our database now
+						cursor = conn.cursor()
+						
+						timeobj = datetime.fromtimestamp(int(result['timestamp']))
+						timeymd = timeobj.strftime('%Y%m%d')
+						
+						cursor.execute("\
+							INSERT INTO tbl_article\
+							(article_source, article_html, article_text, date_timestamp, date_string, section_string, koluto_id,\
+								article_title, parent_id)\
+							VALUES\
+							(%s, %s, %s, %s, %s, %s,\
+								%s,\
+								%s, %s)\
+						", (result['source'], result['html'], result['text'], result['timestamp'], timeymd, result['section'],
+								kolutoSubmited and kolutoSubmited['_id'] or '',
+								result['title'], parentId
+						))
+						
+						cursor.close()
+						
+						dbSubmited = True
+					except mdb.Error:
+						dbSubmited = False
+					except Exception, e:
+						raise
+						print "Problem working with " + itemPath
+						pass
 			else:
 				print "Unable to parse " + itemPath
 			
-			if (submit and kolutoSubmited != False):
-				# submit to our database now
-				try:
-					cursor = conn.cursor()
-					
-					timeobj = datetime.fromtimestamp(int(result['timestamp']))
-					timeymd = timeobj.strftime('%Y%m%d')
-					
-					cursor.execute("\
-						INSERT INTO tbl_article\
-						(article_source, article_html, article_text, date_timestamp, date_string, section_string, koluto_id)\
-						VALUES\
-						(%s, %s, %s, %s, %s, %s, %s)\
-					", (result['source'], result['html'], result['text'], result['timestamp'], timeymd, result['section'], kolutoSubmited['_id']))
-
-					cursor.close()
-
-					dbSubmited = True
-				except mdb.Error:
-					dbSubmited = False
-				
 			# okie, now create the file in target
 			# to mark this file as processed
 			try:
@@ -169,7 +217,7 @@ def lookForArticles(source, target, dir, submit = False):
 				# huh?
 				pass
 			
-			print (itemPath, kolutoSubmited != False, dbSubmited)
+			print (itemPath, kolutoSubmited != False, dbSubmited, parentId)
 		elif (os.path.isdir(itemPath)):
 			# found a sub directory, recursively process it
 			if (item == '.git'): continue
@@ -263,7 +311,7 @@ def parseArticle(contents):
 		# we got a final answer, returns it
 		
 		result = {
-			'title': unicode(bs.find(u'title')),
+			'title': textOf(bs.find(u'title'), False).strip(),
 			'html': textOf(finalAnswer, True),
 			'text': textOf(finalAnswer, False)
 		};
@@ -275,6 +323,7 @@ def parseArticle(contents):
 
 def main():
 	global conn
+	global koluto
 	
 	try:
 		conn = mdb.connect(
@@ -284,6 +333,9 @@ def main():
 			db=crawling_config.MYSQL_DATABASE,
 			charset='utf8'
 		)
+		
+		koluto = Koluto()
+		koluto.setAuthInfo('sondh', '1')
 		
 		if (conn):
 			conn.autocommit(True) # make it commit automatically so we can Ctrl+C anytime
