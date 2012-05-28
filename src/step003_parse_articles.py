@@ -34,7 +34,9 @@ def textOf(soup, getTag, isLinkVisible=True):
 			# return False
 		return True
 	
-	if (getTag):
+	if (soup == None):
+		textOf = u''
+	elif (getTag):
 		texts = soup
 		visibleTexts = filter(visible, texts)
 		textOf = u' '.join(map(unicode, visibleTexts))
