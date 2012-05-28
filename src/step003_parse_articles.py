@@ -186,7 +186,7 @@ def lookForArticles(source, target, dir, submit = False):
 								%s,\
 								%s, %s)\
 						", (result['source'], result['html'], result['text'], result['timestamp'], timeymd, result['section'],
-								kolutoSubmited and kolutoSubmited['_id'] or '',
+								kolutoSubmited and kolutoSubmited['_id'] or None,
 								result['title'], parentId
 						))
 						
@@ -194,6 +194,7 @@ def lookForArticles(source, target, dir, submit = False):
 						
 						dbSubmited = True
 					except mdb.Error:
+						raise
 						dbSubmited = False
 					except Exception, e:
 						raise
