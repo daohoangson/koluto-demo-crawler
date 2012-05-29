@@ -126,7 +126,7 @@ def lookForArticles(source, target, dir, submit = False):
 			
 			itemPathInTarget = itemPath.replace(source, target)
 			if (fileExists(itemPathInTarget)):
-				print "PROCESSED->SKIPPED: %s" % itemPath
+				# print "PROCESSED->SKIPPED: %s" % itemPath
 				continue # for item in contents:
 			
 			try:
