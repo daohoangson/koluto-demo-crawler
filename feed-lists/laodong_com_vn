@@ -1,19 +1,10 @@
 XPath
 channel/item/link
-http://laodong.com.vn/Rss/The-Thao/2 sport
-http://laodong.com.vn/Rss/Bong-da/256 sport
-http://laodong.com.vn/Rss/Tennis/312 sport
-http://laodong.com.vn/Rss/Golf/313 sport
-http://laodong.com.vn/Rss/Xa-Hoi/3 social
-http://laodong.com.vn/Rss/Tuyen-sinh/4 education
-http://laodong.com.vn/Rss/Giao-duc/6 education
-http://laodong.com.vn/Rss/Y-te/248 lifestyle
-http://laodong.com.vn/Rss/Moi-truong/283 lifestyle
-http://laodong.com.vn/Rss/Kinh-Te/12 finance
-http://laodong.com.vn/Rss/Chung-Khoan/14 finance
-http://laodong.com.vn/Rss/Doanh-nghiep-/276 finance
-http://laodong.com.vn/Rss/Tai-chinh/285 finance
-http://laodong.com.vn/Rss/Vi-tinh/22 it
-http://laodong.com.vn/Rss/San-Pham-Moi/42 it
-http://laodong.com.vn/Rss/Kinh-nghiem/43 it
-http://laodong.com.vn/Rss/Hacker-virus/45 it
+http://laodong.com.vn/RSS/Chinh-tri/57.rss social
+http://laodong.com.vn/RSS/Xa-hoi/59.rss social
+http://laodong.com.vn/RSS/The-thao/60.rss sport
+http://laodong.com.vn/RSS/Van-hoa/61.rss culture
+http://laodong.com.vn/RSS/Kinh-te/63.rss finance
+http://laodong.com.vn/RSS/Bat-dong-san/64.rss finance
+http://laodong.com.vn/RSS/Cong-nghe/66.rss it
+http://laodong.com.vn/RSS/Doi-song/74.rss lifestyle

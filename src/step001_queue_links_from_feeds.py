@@ -4,7 +4,7 @@ import resource
 import signal
 import sys
 import time
-import urllib
+import urllib, urllib2
 import xml.etree.ElementTree
 import crawling_config
 from crawling_lock import FileLock
@@ -20,7 +20,7 @@ def readFeed(feedUrl, feedMode, feedModeConfig, section='Unknown'):
 	links = []
 	
 	try:
-		feedContents = urllib.urlopen(feedUrl).read()
+		feedContents = urllib2.urlopen(feedUrl, None, 10).read()
 		
 		if (feedMode == 'XPath'):
 			# we are processing XPath mode

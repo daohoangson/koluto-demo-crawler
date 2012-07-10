@@ -4,7 +4,7 @@ import re
 import signal
 import sys
 import time
-import urllib
+import urllib, urllib2
 import urlparse
 import json
 import crawling_config
@@ -48,7 +48,7 @@ def fetchLink(link, linkFile, section='Unknown'):
 		pass
 	
 	try:
-		contents = urllib.urlopen(link).read()	
+		contents = urllib2.urlopen(link, None, 10).read()	
 		
 		f = open(linkFile, 'w')
 		
@@ -91,8 +91,14 @@ def main():
 		
 		feedQueue.delete()
 		
-		crawling_config.DEBUG('Sleeping for %d seconds' % crawling_config.SLEEP_TIME)
-		time.sleep(crawling_config.SLEEP_TIME)
+		# count queue files
+		# do not wait if there are 3+ queue files...
+		queueFiles = glob.glob(crawling_config.DIR_QUEUE + '*')
+		if (len(queueFiles) < 3):
+			crawling_config.DEBUG('Sleeping for %d seconds' % crawling_config.SLEEP_TIME)
+			time.sleep(crawling_config.SLEEP_TIME)
+		else:
+			print 'There are %d queue files, continue immediately!' % (len(queueFiles))
 				
 	print 'Bye bye'
 

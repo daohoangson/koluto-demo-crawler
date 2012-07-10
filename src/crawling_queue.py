@@ -5,7 +5,7 @@ from crawling_lock import FileLock
 
 class FileQueue:
 	FILENAME_PREFIX = 'queue_'
-	MAX_FILESIZE = 102400 # in bytes, equals 100KB
+	MAX_FILESIZE = 204800 # in bytes, equals 200KB
 	existing = []
 	
 	def __init__(self, queueDir, lockDir, mode = 'w'):
